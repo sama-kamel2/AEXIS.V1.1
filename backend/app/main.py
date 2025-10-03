@@ -1,9 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 import numpy as np
-import json
+import pandas as pd
 
 app = FastAPI(
     title="ExoHunter AI API",
@@ -66,6 +66,20 @@ async def root():
 async def health_check():
     return {"status": "healthy"}
 
+# ✅ Endpoint لرفع CSV
+@app.post("/api/upload-csv")
+async def upload_csv(file: UploadFile = File(...)):
+    try:
+        df = pd.read_csv(file.file, encoding="utf-8-sig")
+        return {
+            "success": True,
+            "columns": df.columns.tolist(),
+            "rows": len(df),
+            "preview": df.head(5).to_dict(orient="records")
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"CSV Error: {str(e)}")
+
 @app.post("/api/predict", response_model=PredictionResponse)
 async def predict_exoplanet(request: PredictionRequest):
     import time
@@ -79,7 +93,6 @@ async def predict_exoplanet(request: PredictionRequest):
     transits = find_transit_events(time_data, normalized_flux) if has_transit else []
 
     probability = 0.85 + np.random.random() * 0.12 if has_transit else 0.15 + np.random.random() * 0.25
-
     inference_time = int((time.time() - start_time) * 1000)
 
     return PredictionResponse(
@@ -101,9 +114,7 @@ async def predict_exoplanet(request: PredictionRequest):
 
 @app.post("/api/train")
 async def train_model(config: TrainingConfig):
-    import time
-    import asyncio
-
+    import time, asyncio
     await asyncio.sleep(config.epochs * 0.5)
 
     metrics = ModelMetrics(
@@ -147,10 +158,11 @@ async def get_sample_data():
         "flux": flux_data.tolist()
     }
 
+# ✅ معالجة مشكلة ZeroDivisionError
 def normalize_data(flux: np.ndarray) -> np.ndarray:
     mean = np.mean(flux)
     std = np.std(flux)
-    return (flux - mean) / std
+    return (flux - mean) / std if std > 0 else flux - mean
 
 def detect_transit_pattern(normalized_flux: np.ndarray) -> bool:
     threshold = -2.0
@@ -192,6 +204,6 @@ def find_transit_events(time: np.ndarray, normalized_flux: np.ndarray) -> List[d
 
     return transits
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
