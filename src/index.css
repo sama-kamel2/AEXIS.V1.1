@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-100;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .custom-cursor {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="%23ffffff" opacity="0.8"/><circle cx="12" cy="12" r="2" fill="%2300ffff"/></svg>') 12 12, auto;
+  }
+
+  .space-gradient {
+    background: linear-gradient(
+      135deg,
+      #0a0e27 0%,
+      #1a1f3a 25%,
+      #0f1729 50%,
+      #1e2a47 75%,
+      #0d1423 100%
+    );
+  }
+
+  .nebula-gradient {
+    background: radial-gradient(
+      ellipse at top,
+      rgba(88, 101, 242, 0.15) 0%,
+      rgba(16, 185, 129, 0.1) 50%,
+      transparent 100%
+    );
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.5),
+                 0 0 20px rgba(96, 165, 250, 0.3),
+                 0 0 30px rgba(96, 165, 250, 0.1);
+  }
+
+  .glow-border {
+    box-shadow: 0 0 15px rgba(96, 165, 250, 0.3),
+                inset 0 0 15px rgba(96, 165, 250, 0.1);
+  }
+
+  .glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+  }
+
+  .cosmic-glow {
+    animation: cosmic-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes cosmic-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.4),
+                  0 0 40px rgba(96, 165, 250, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(96, 165, 250, 0.6),
+                  0 0 60px rgba(96, 165, 250, 0.3);
+    }
+  }
+
+  .floating-planet {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+  }
+
+  .zoom-stars {
+    animation: zoom 2s ease-out forwards;
+  }
+
+  @keyframes zoom {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .star-twinkle {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .transition-glow {
+    transition: all 0.3s ease;
+  }
+
+  .transition-glow:hover {
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.5),
+                0 0 40px rgba(96, 165, 250, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+}
